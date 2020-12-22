@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const { createCustomerQuery, getAllCustomersQuery, getCustomerByIdQuery, updateCustomerQuery, deleteCustomerQuery } = require('../commons/queries');
+const { createCustomerQuery, getAllCustomersQuery, getCustomerByIdQuery, updateCustomerQuery, deleteCustomerQuery, authenticateCustomerQuery } = require('../commons/queries');
 const { pool } = require('../config/config');
 
 const getAllCustomers = async () => {
@@ -89,10 +89,28 @@ const _deleteCustomer = async (id) => {
 	});
 };
 
+const customersAuthenticate = async ({ username, password }) => {
+	return new Promise((resolve, reject) => {
+		pool.query(
+			authenticateCustomerQuery,
+			[
+				username,
+				password
+			],
+			(error, results) => {
+				if (error || results.rows.length < 1) {
+					reject(error);
+				}
+				resolve(results.rows[0]);
+			});
+	});
+};
+
 module.exports = {
 	getAllCustomers,
 	getCustomerById,
 	createCustomer,
 	updateCustomer,
-	delete: _deleteCustomer
+	delete: _deleteCustomer,
+	customersAuthenticate
 };

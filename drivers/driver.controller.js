@@ -32,11 +32,35 @@ const _delete = (req, res, next) => {
 		.catch(err => next(err));
 };
 
+const authenticate = (req, res, next) => {
+	driverService.driversAuthenticate(req.body)
+		.then(driver => {
+			driver.token = jwt.sign(
+				{
+					sub:
+					{
+						username: driver.username,
+						firstname: driver.firstname,
+						lastname: driver.lastname,
+						permissions: [{ 'driver': false }, { 'driver': true }],
+						locale: 'CO',
+						prime: true
+					}
+				}
+				, config.secret,
+				{ expiresIn: '1h' });
+			console.log(driver);
+			return res.json(driver);
+		})
+		.catch(error => res.json(error));
+};
+
 // routes
 router.get('/', getAll);
 router.post('/register', register);
 router.get('/:id/detail', getById);
 router.put('/:id/detail', update);
 router.delete('/:id/detail', _delete);
+router.post('/authenticate', authenticate);
 
 module.exports = router;

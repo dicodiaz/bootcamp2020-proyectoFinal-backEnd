@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const { createDriverQuery, getAllDriversQuery, getDriverByIdQuery, updateDriverQuery, deleteDriverQuery } = require('../commons/queries');
+const { createDriverQuery, getAllDriversQuery, getDriverByIdQuery, updateDriverQuery, deleteDriverQuery, authenticateDriverQuery } = require('../commons/queries');
 const { pool } = require('../config/config');
 
 const getAllDrivers = async () => {
@@ -89,10 +89,30 @@ const _deleteDriver = async (id) => {
 	});
 };
 
+const driversAuthenticate = async ({ username, password }) => {
+	return new Promise((resolve, reject) => {
+		pool.query(
+			authenticateDriverQuery,
+			[
+				username,
+				password
+			],
+			(error, results) => {
+				console.log(error);
+				console.log(results.rows);
+				if (error || results.rows.length < 1) {
+					reject(error);
+				}
+				resolve(results.rows[0]);
+			});
+	});
+};
+
 module.exports = {
 	getAllDrivers,
 	getDriverById,
 	createDriver,
 	updateDriver,
-	delete: _deleteDriver
+	delete: _deleteDriver,
+	driversAuthenticate
 };

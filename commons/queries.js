@@ -9,6 +9,8 @@ const updateCustomerQuery = 'UPDATE public.customers SET customer_id=$2, firstna
 
 const deleteCustomerQuery = 'DELETE FROM public.customers WHERE id=$1';
 
+const authenticateCustomerQuery = 'SELECT * FROM public.customers WHERE username=$1 AND password=$2';
+
 // Drivers
 const getAllDriversQuery = 'SELECT * FROM public.drivers';
 
@@ -19,6 +21,8 @@ const getDriverByIdQuery = 'SELECT * FROM public.drivers WHERE id=$1';
 const updateDriverQuery = 'UPDATE public.drivers SET driver_id=$2, firstname=$3, lastname=$4, age=$5, username=$6, phone=$7, password=$8 WHERE id=$1';
 
 const deleteDriverQuery = 'DELETE FROM public.drivers WHERE id=$1';
+
+const authenticateDriverQuery = 'SELECT * FROM public.drivers WHERE username=$1 AND password=$2';
 
 // Cars
 const getAllCarsQuery = 'SELECT * FROM public.cars';
@@ -48,11 +52,13 @@ module.exports = {
   getCustomerByIdQuery,
   updateCustomerQuery,
   deleteCustomerQuery,
+  authenticateCustomerQuery,
   getAllDriversQuery,
   createDriverQuery,
   getDriverByIdQuery,
   updateDriverQuery,
   deleteDriverQuery,
+  authenticateDriverQuery,
   getAllCarsQuery,
   createCarQuery,
   getCarByIdQuery,
